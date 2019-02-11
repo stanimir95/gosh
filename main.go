@@ -2,14 +2,15 @@ package main
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	"os"
 	"os/exec"
+	"os/user"
 	"strings"
 )
 
 func main() {
+
 	reader := bufio.NewReader(os.Stdin)
 	for {
 		input, err := reader.ReadString('\n')
@@ -23,13 +24,22 @@ func main() {
 }
 
 func runInput(input string) error {
+
 	input = strings.TrimSuffix(input, "\n")
 	args := strings.Split(input, " ")
+
+	user, err := user.Current()
+	if err != nil {
+		panic(err)
+	}
+
+	homedir := user.HomeDir
+	// username := user.Username
 
 	switch args[0] {
 	case "cd":
 		if len(args) < 2 {
-			return errors.New("Path required")
+			return os.Chdir(homedir)
 		}
 		return os.Chdir(args[1])
 	case "exit":
