@@ -13,6 +13,19 @@ func main() {
 
 	reader := bufio.NewReader(os.Stdin)
 	for {
+		user, err := user.Current()
+		if err != nil {
+			panic(err)
+		}
+		// homedir := user.HomeDir
+		username := user.Username
+
+		dir, err := os.Getwd()
+		if err != nil {
+			panic(err)
+		}
+
+		fmt.Print(username + "@" + dir + " ~: ")
 		input, err := reader.ReadString('\n')
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
